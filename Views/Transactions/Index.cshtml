@@ -1,0 +1,49 @@
+﻿@model MyFinances.Models.CalendarViewModel
+
+@{
+    ViewData["Title"] = "Kalendarz";
+}
+
+<h2>Kalendarz - @Model.Month/@Model.Year</h2>
+
+<div class="d-flex justify-content-between mb-3">
+    <a class="btn btn-primary" href="@Url.Action("Index", new { year = Model.Year, month = Model.Month - 1 })">Poprzedni</a>
+    <a class="btn btn-primary" href="@Url.Action("Index", new { year = Model.Year, month = Model.Month + 1 })">Następny</a>
+</div>
+
+<table class="table table-bordered text-center">
+    <thead>
+        <tr>
+            <th>Poniedziałek</th>
+            <th>Wtorek</th>
+            <th>Środa</th>
+            <th>Czwartek</th>
+            <th>Piątek</th>
+            <th>Sobota</th>
+            <th>Niedziela</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            int dayCounter = 0;
+            for (int i = 0; i < 6; i++) // 6 tygodni
+            {
+                <tr>
+                    @for (int j = 0; j < 7; j++) // 7 dni
+                    {
+                        var day = Model.Days[dayCounter++];
+                        string className = day.Month == Model.Month ? "text-dark" : "text-muted";
+                        <td class="@className p-4"> <div>@day.Day</div> 
+                        @{
+                            if (className != "text-muted")
+                            {
+                                <button class="btn btn-success">+</button>
+                            } 
+                        }
+                        </td>
+                    }
+                </tr>
+            }
+        }
+    </tbody>
+</table>
