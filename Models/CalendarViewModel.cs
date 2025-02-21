@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-
+﻿
 namespace MyFinances.Models
 {
     public class CalendarViewModel
@@ -27,13 +24,33 @@ namespace MyFinances.Models
 
             int firstDayOfWeek = (int)firstDay.DayOfWeek -1; 
 
-            // Znalezienie pierwszego dnia w siatce kalendarza
             DateTime startDate = firstDay.AddDays(-firstDayOfWeek);
 
-            // Tworzenie siatki kalendarza (6 tygodni x 7 dni = 42)
             for (int i = 0; i < 42; i++)
             {
                 Days.Add(startDate.AddDays(i));
+            }
+        }
+        public object GetPreviousMonthParams(int currentYear, int currentMonth)
+        {
+            if (currentMonth == 1)
+            {
+                return new { year = currentYear - 1, month = 12 };
+            }
+            else
+            {
+                return new { year = currentYear, month = currentMonth - 1 }; 
+            }
+        }
+        public object GetNextMonthParams(int currentYear, int currentMonth)
+        {
+            if (currentMonth == 12)
+            {
+                return new { year = currentYear + 1, month = 1 }; 
+            }
+            else
+            {
+                return new { year = currentYear, month = currentMonth +1 };
             }
         }
     }
