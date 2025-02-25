@@ -1,0 +1,189 @@
+﻿@model MyFinances.Models.CalendarViewModel
+
+@{
+    ViewData["Title"] = "Kalendarz";
+}
+
+<h1>Kalendarz Finansów</h1>
+<div class="d-flex justify-content-between mb-3">
+    <a class="btn btn-primary" href="@Url.Action("Calendar", Model.GetPreviousMonthParams(Model.Year,Model.Month))">Poprzedni miesiąc</a>
+    <h2>@Model.Month /@Model.Year</h2>
+    <a class="btn btn-primary" href="@Url.Action("Calendar", Model.GetNextMonthParams(Model.Year,Model.Month))">Następny miesiąc</a>
+</div>
+
+<table class="table table-bordered text-center" style="min-width:750px">
+    <thead>
+        <tr>
+            <th>Poniedziałek</th>
+            <th>Wtorek</th>
+            <th>Środa</th>
+            <th>Czwartek</th>
+            <th>Piątek</th>
+            <th>Sobota</th>
+            <th>Niedziela</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            int dayCounter = 0;
+            bool SixWeeks = false;
+            string textclass = "";
+            string divclass = "";
+            for (int i = 0; i < 6; i++) // 6 tygodni
+            {
+                <tr class="p-0">
+                    @for (int j = 0; j < 7; j++) // 7 dni
+                    {
+                        var day = Model.Days[dayCounter++];
+                        if(day.Month == Model.Month)
+                        {
+                            textclass = "text-dark";
+                            divclass = "specialhover";
+                        }
+                        else
+                        {
+                            textclass = "text-muted";
+                            divclass = "";
+                        }
+                        if (i == 5 && j == 0 && textclass == "text-dark")
+                        {
+                            SixWeeks = true;
+                        }
+                        if(i != 5 || SixWeeks)
+                        {
+                            <td class="@textclass @divclass p-0 position-relative" style="height: 130px;">
+
+                                <!-- Edition Button -->
+                                @if (textclass != "text-muted")
+                                {
+                                    <div class="position-absolute top-0 end-0 p-0">
+                                        <button type="button" class="btn btn-sm btn-outline-secondary border-0 opacity-75 edit-btn"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#editModal"
+                                                data-day="@day.Date">
+                                            ✏
+                                        </button>
+
+                                    </div>
+                                }
+
+                                <!-- Day and details -->
+                                <div class="flex-row d-flex h-60">
+                                    <!--Details -->
+                                    <div class="flex-column w-100 align-items-center justify-content-center div1" style="margin-top:10px;">
+                                        @if (textclass != "text-muted")
+                                        {
+                                            <label class="text-success">20</label>
+                                            <label class="text-danger">-300</label>
+                                            
+                                        }
+                                    </div>
+                                    <!--Day -->
+                                    <div class="d-flex flex-column w-100 h-60 align-items-center justify-content-center" style="margin-top:15px;">
+                                        <label class="fs-2">@day.Day</label>
+                                    </div>
+                                </div>
+                                <!-- Work hours and daily balance-->
+                                <div class="d-flex flex-column align-items-center h-40">
+                                    @if (textclass!= "text-muted")
+                                    {
+                                        <label> 10:00 - 16:00</label>
+                                        <label>Bilans: 222300</label>
+                                    } 
+                                </div>
+                                
+                            </td>
+                        }
+
+                    }
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+<div class="card p-2">
+    <div class="text-center w-100">
+        <h2>Podsumowanie miesiąca</h2>
+    </div>
+    <div class="d-flex justify-content-between mb-3">
+        <label class="text-danger fs-5">wydatki: -1231</label>
+        <label class="text-success fs-5">Bilans miesiąca: 123</label>
+        <label class="text-success fs-5">przychód: 213213</label>
+    </div>
+</div>
+<div class="modal fade" id="editModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edytuj dzień</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Zamknij"></button>
+            </div>
+            <div class="modal-body text-center">
+                <button type="button" class="btn btn-danger border-2 choose-btn"
+                        data-bs-toggle="modal"
+                        data-bs-target="#addTransactionModal"
+                        data-type="0">
+                    Wydatek
+                </button>
+                <button type="button" class="btn btn-success border-2 choose-btn"
+                        data-bs-toggle="modal"
+                        data-bs-target="#addTransactionModal"
+                        data-type="1">
+                    Przychód
+                </button>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Anuluj</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="addTransactionModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Dodaj transakcje</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Zamknij"></button>
+            </div>
+            <div class="modal-body">
+                <form method="post" id="transactionForm" action="/Calendar/AddEntry">
+                    <input type="hidden"id="hiddenDate" name="hiddenDate" class="form-control" required>
+                    <input type= "hidden"id="transactionType" name="TransactionType">
+
+
+                    <label for="amount">Kwota</label>
+                    <input type="text" id="amount" name="Amount" class="form-control" required pattern="^\d+(,\d{1,2})?$" title="Wpisz liczbę, np. 10,50">
+                    <label for="category">Wybierz kategorię</label>
+                    <select id="category" name="Category" class="form-select" required>
+                        <option value="" disabled selected>Wybierz kategorię</option>
+                        <option value="food">Jedzenie</option>
+                        <option value="transport">Transport</option>
+                        <option value="entertainment">Rozrywka</option>
+                    </select>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Anuluj</button>
+                        <button type="submit" class="btn btn-primary">Zapisz</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        // Obsługa kliknięcia w przycisk edycji
+        $(document).on("click", ".edit-btn", function () {
+            var selectedDate = $(this).data("day"); // Pobranie wartości `data-day`
+            $("#hiddenDate").val(selectedDate); // Ustawienie wartości w ukrytym input
+        });
+    });
+    $(document).ready(function () {
+        $(document).on("click", ".choose-btn", function () {
+            var selectedtype = $(this).data("type"); // Pobierz wartość z data-type
+            $("#transactionType").val(selectedtype); // Ustaw wartość w hidden input
+        });
+    });
+</script>
+

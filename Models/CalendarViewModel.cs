@@ -6,6 +6,10 @@ namespace MyFinances.Models
         public int Year { get; set; }
         public int Month { get; set; }
         public List<DateTime> Days { get; set; } = new List<DateTime>();
+        public DateTime hiddenDate { get; set; }
+        public double Amount{ get; set; }
+        public int TransactionType { get; set; }
+        public string Category { get; set; }
 
         public CalendarViewModel(int year, int month)
         {
@@ -14,6 +18,7 @@ namespace MyFinances.Models
 
             GenerateCalendar();
         }
+        public CalendarViewModel() { }
 
         private void GenerateCalendar()
         {
