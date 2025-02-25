@@ -7,21 +7,22 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/MyFinances.styles.css" asp-append-version="true" />
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 </head>
 <body>
     <header class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
-            <a class="navbar-brand" href="@Url.Action("Index", "Transactions")">MyFinances</a>
+            <a class="navbar-brand" href="@Url.Action("Calendar", "Calendar")">MyFinances</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="@Url.Action("Index", "Transactions")">Kalendarz</a>
+                        <a class="nav-link" href="@Url.Action("Calendar", "Calendar")">Kalendarz</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="@Url.Action("Summary", "Home")">Podsumowanie</a>
+                        <a class="nav-link" href="@Url.Action("Summary", "Summary")">Podsumowanie</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="@Url.Action("Login", "Account")">Logowanie</a>
