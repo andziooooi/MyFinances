@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace MyFinances.Models
 {
@@ -9,6 +10,7 @@ namespace MyFinances.Models
         public int ID { get; set; }
         public string Name { get; set; }
         public int Type { get; set; }
+        [JsonIgnore]
         public virtual List<Transactions> Transactions { get; set; }
 
         [NotMapped]

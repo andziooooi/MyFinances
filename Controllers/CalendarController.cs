@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using MyFinances.Models;
-using WordZone.Services;
+using MyFinances.Database;
 
 namespace MyFinances.Controllers
 {
@@ -18,7 +17,7 @@ namespace MyFinances.Controllers
             int currentYear = year ?? DateTime.Now.Year;
             int currentMonth = month ?? DateTime.Now.Month;
 
-            var model = new CalendarViewModel(currentYear, currentMonth);
+            var model = new CalendarViewModel(currentYear, currentMonth,_dataService);
             model.ExpenseCategories = _dataService.GetCategoriesByType(0);
             model.IncomeCategories = _dataService.GetCategoriesByType(1);
 

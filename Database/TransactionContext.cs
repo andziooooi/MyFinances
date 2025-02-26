@@ -31,7 +31,7 @@ namespace MyFinances.Database
 
         // Category -> transactions
         modelBuilder.Entity<Transactions>()
-            .HasOne<Categories>()
+            .HasOne(t => t.Category)
             .WithMany(c => c.Transactions)
             .HasForeignKey(t => t.CategoriesID)
             .OnDelete(DeleteBehavior.Cascade);

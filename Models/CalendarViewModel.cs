@@ -1,4 +1,6 @@
 ﻿
+using MyFinances.Database;
+
 namespace MyFinances.Models
 {
     public class CalendarViewModel
@@ -12,12 +14,50 @@ namespace MyFinances.Models
         public int Category { get; set; }
         public List<Categories> ExpenseCategories { get; set; }
         public List<Categories> IncomeCategories { get; set; }
+        public List<double> dayIncomeSum { get; set; } = new List<double>();
+        public List<double> dayExpenseSum { get; set; } = new List<double>();
+        public List<double> monthlyIncomeSum { get; set; } = new List<double>();
+        public List<double> monthlyExpenseSum { get; set; } = new List<double>();
 
-        public CalendarViewModel(int year, int month)
+        public CalendarViewModel(int year, int month,DataService ds)
         {
             Year = year;
             Month = month;
             GenerateCalendar();
+            monthlyIncomeSum = ds.GetMonthlyTransactionsAmountsByType(1, new DateTime(Year, Month, 1), new DateTime(Year, Month, DateTime.DaysInMonth(Year, Month)),1);
+            monthlyExpenseSum = ds.GetMonthlyTransactionsAmountsByType(1, new DateTime(Year, Month, 1), new DateTime(Year, Month, DateTime.DaysInMonth(Year, Month)), 0);
+            foreach (DateTime day in Days)
+            {
+                var IncomeTrans = ds.GetDailyTransactionsByType(1, day.Date, 1);
+                var OutcomeTrans = ds.GetDailyTransactionsByType(1, day.Date, 0);
+                double DailyIncomeSum = 0;
+                double DailyOutcomeSum = 0;
+                if(IncomeTrans !=null)
+                {
+                    foreach (var t in IncomeTrans)
+                    {
+                        DailyIncomeSum += t.Amount;
+                    }
+                    dayIncomeSum.Add(DailyIncomeSum);
+                }
+                else
+                {
+                    dayIncomeSum.Add(0);
+                }
+                if(OutcomeTrans !=null)
+                {
+                    foreach(var t in OutcomeTrans)
+                    {
+                        DailyOutcomeSum += t.Amount;
+                    }
+                    dayExpenseSum.Add(DailyOutcomeSum);
+                }
+                else
+                {
+                    dayExpenseSum.Add(0);
+                }
+            }
+           
         }
         public CalendarViewModel() { }
 
