@@ -9,13 +9,14 @@ namespace MyFinances.Models
         public DateTime hiddenDate { get; set; }
         public double Amount{ get; set; }
         public int TransactionType { get; set; }
-        public string Category { get; set; }
+        public int Category { get; set; }
+        public List<Categories> ExpenseCategories { get; set; }
+        public List<Categories> IncomeCategories { get; set; }
 
         public CalendarViewModel(int year, int month)
         {
             Year = year;
             Month = month;
-
             GenerateCalendar();
         }
         public CalendarViewModel() { }

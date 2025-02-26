@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using MyFinances.Models;
 using WordZone.Services;
 
@@ -6,9 +7,9 @@ namespace MyFinances.Controllers
 {
     public class CalendarController : Controller
     {
-        private readonly DataService _dataService; // 🔹 Dodaj pole na serwis
+        private readonly DataService _dataService;
 
-        public CalendarController(DataService dataService) // 🔹 Konstruktor z DI
+        public CalendarController(DataService dataService) 
         {
             _dataService = dataService;
         }
@@ -18,6 +19,9 @@ namespace MyFinances.Controllers
             int currentMonth = month ?? DateTime.Now.Month;
 
             var model = new CalendarViewModel(currentYear, currentMonth);
+            model.ExpenseCategories = _dataService.GetCategoriesByType(0);
+            model.IncomeCategories = _dataService.GetCategoriesByType(1);
+
             return View(model);
         }
         [HttpPost]
@@ -25,7 +29,14 @@ namespace MyFinances.Controllers
         {
             if (model != null)
             {
-                _dataService.Add(model.hiddenDate, model.TransactionType, model.Amount, model.Category);
+                Transactions transaction = new Transactions
+                {
+                    Date = model.hiddenDate,
+                    Amount = model.Amount,
+                    CategoriesID = model.Category,
+                    UsersID = 1
+                };
+                _dataService.Add(transaction);
             }
 
             return RedirectToAction("Calendar");

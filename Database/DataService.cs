@@ -14,19 +14,17 @@ namespace WordZone.Services
             _context = context;
         }
 
-        public void Add(DateTime date,int type,double amount,string category)
+        public void Add(Transactions transaction)
         {
-            /* only test if db conn works
-            Transactions transaction = new Transactions
-            {
-                Amount = amount,
-                Date = date,
-                UsersID = 1,
-                CategoriesID = 1,
-            };
             _context.Transactions.Add(transaction);
             _context.SaveChanges();
-            */
+            
         }
+
+        public List<Categories> GetCategoriesByType(int type)
+        {
+            return _context.Categories.Where(c => c.Type == type).ToList();
+        }
+
     }
 }

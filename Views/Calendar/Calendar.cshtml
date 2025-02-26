@@ -154,11 +154,9 @@
                     <label for="amount">Kwota</label>
                     <input type="text" id="amount" name="Amount" class="form-control" required pattern="^\d+(,\d{1,2})?$" title="Wpisz liczbę, np. 10,50">
                     <label for="category">Wybierz kategorię</label>
+                    <!-- Selects are genereated dynamically by js -->
                     <select id="category" name="Category" class="form-select" required>
-                        <option value="" disabled selected>Wybierz kategorię</option>
-                        <option value="food">Jedzenie</option>
-                        <option value="transport">Transport</option>
-                        <option value="entertainment">Rozrywka</option>
+                        
                     </select>
 
                     <div class="modal-footer">
@@ -171,19 +169,11 @@
     </div>
 </div>
 
-<script>
-    $(document).ready(function () {
-        // Obsługa kliknięcia w przycisk edycji
-        $(document).on("click", ".edit-btn", function () {
-            var selectedDate = $(this).data("day"); // Pobranie wartości `data-day`
-            $("#hiddenDate").val(selectedDate); // Ustawienie wartości w ukrytym input
-        });
-    });
-    $(document).ready(function () {
-        $(document).on("click", ".choose-btn", function () {
-            var selectedtype = $(this).data("type"); // Pobierz wartość z data-type
-            $("#transactionType").val(selectedtype); // Ustaw wartość w hidden input
-        });
-    });
-</script>
+@section Scripts {
+    <script>
+        var expenseCategories = @Html.Raw(Json.Serialize(Model.ExpenseCategories));
+        var incomeCategories = @Html.Raw(Json.Serialize(Model.IncomeCategories));
+    </script>
+    <script src="~/js/calendar.js"></script>
+}
 

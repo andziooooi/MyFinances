@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MyFinances.Models
 {
@@ -9,5 +10,8 @@ namespace MyFinances.Models
         public string Name { get; set; }
         public int Type { get; set; }
         public virtual List<Transactions> Transactions { get; set; }
+
+        [NotMapped]
+        public virtual double Sum { get; set; }
     }
 }
