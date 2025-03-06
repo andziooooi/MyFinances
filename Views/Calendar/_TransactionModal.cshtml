@@ -1,0 +1,52 @@
+﻿@model MyFinances.Models.AddModalViewModel
+
+<div class="modal fade" id="addTransactionModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalTitle">Dodaj transakcję</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="transactionForm">
+                    <input type="hidden" id="hiddenDate" name="HiddenDate" value="@Model.HiddenDate">
+
+                    <label for="category">Kategoria</label>
+                    <select id="category" name="Category" class="form-select">
+                        <option value="" disabled selected>Wybierz kategorię</option>
+                        @foreach (var category in Model.TransactionType == 0 ? Model.ExpenseCategories : Model.IncomeCategories)
+                        {
+                            <option value="@category.ID">@category.Name</option>
+                        }
+
+                    </select>
+
+                    <div>
+                        <label for="amount">Kwota</label>
+                        <input type="text" id="amount" name="Amount" class="form-control" pattern="^\d+(,\d{1,2})?$" title="Wpisz kwotę" oninput="this.value = this.value.replace('.', ',');">
+                        <span id="AmountError" class="text-danger error-label" style="display:none;"></span>
+                    </div>
+
+                    <div>
+                        <label for="workedHours" style="display:none">Przepracowane godziny</label>
+                        <input type="hidden" id="workedHours" name="WorkedHours" class="form-control">
+                        <span id="WorkedHoursError" class="text-danger error-label" style="display:none;"></span>
+
+                    </div>
+
+                    <div>
+                        <label for="payPerHour" style="display:none">Płaca za godzinę</label>
+                        <input type="hidden" id="payPerHour" name="PayPerHour" class="form-control" required pattern="^\d+(,\d{1,2})?$" title="Wpisz kwotę" oninput="this.value = this.value.replace('.', ',');">
+                        <span id="PayPerHourError" class="text-danger error-label" style="display:none;"></span>
+
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Anuluj</button>
+                        <button type="submit" class="btn btn-primary">Zapisz</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

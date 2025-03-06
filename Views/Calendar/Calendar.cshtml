@@ -119,23 +119,20 @@
 
     </div>
 </div>
-<div class="modal fade" id="editModal" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="editModal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Edytuj dzień</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Zamknij"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body text-center">
+                <input type="hidden" id="hiddenDate"/>
                 <button type="button" class="btn btn-danger border-2 choose-btn"
-                        data-bs-toggle="modal"
-                        data-bs-target="#addTransactionModal"
                         data-type="0">
                     Wydatek
                 </button>
                 <button type="button" class="btn btn-success border-2 choose-btn"
-                        data-bs-toggle="modal"
-                        data-bs-target="#addTransactionModal"
                         data-type="1">
                     Przychód
                 </button>
@@ -146,42 +143,9 @@
         </div>
     </div>
 </div>
-<div class="modal fade" id="addTransactionModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Dodaj transakcje</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Zamknij"></button>
-            </div>
-            <div class="modal-body">
-                <form method="post" id="transactionForm" action="/Calendar/AddEntry">
-                    <input type="hidden"id="hiddenDate" name="hiddenDate" class="form-control" required>
-                    <input type= "hidden"id="transactionType" name="TransactionType">
-
-
-                    <label for="amount">Kwota</label>
-                    <input type="text" id="amount" name="Amount" class="form-control" required pattern="^\d+(,\d{1,2})?$" title="Wpisz liczbę, np. 10,50">
-                    <label for="category">Wybierz kategorię</label>
-                    <!-- Selects are genereated dynamically by js -->
-                    <select id="category" name="Category" class="form-select" required>
-                        
-                    </select>
-
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Anuluj</button>
-                        <button type="submit" class="btn btn-primary">Zapisz</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
+<div id="modalContainer"></div>
 
 @section Scripts {
-    <script>
-        var expenseCategories = @Html.Raw(Json.Serialize(Model.ExpenseCategories));
-        var incomeCategories = @Html.Raw(Json.Serialize(Model.IncomeCategories));
-    </script>
-    <script src="~/js/calendar.js"></script>
+    <script src="~/js/calendar.js" asp-append-version="true"></script>
 }
 
