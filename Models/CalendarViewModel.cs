@@ -1,6 +1,7 @@
 ﻿
 using MyFinances.Database;
 
+
 namespace MyFinances.Models
 {
     public class CalendarViewModel
@@ -9,11 +10,6 @@ namespace MyFinances.Models
         public int Month { get; set; }
         public List<DateTime> Days { get; set; } = new List<DateTime>();
         public DateTime hiddenDate { get; set; }
-        public double Amount{ get; set; }
-        public int TransactionType { get; set; }
-        public int Category { get; set; }
-        public List<Categories> ExpenseCategories { get; set; }
-        public List<Categories> IncomeCategories { get; set; }
         public List<double> dayIncomeSum { get; set; } = new List<double>();
         public List<double> dayExpenseSum { get; set; } = new List<double>();
         public List<double> monthlyIncomeSum { get; set; } = new List<double>();

@@ -1,8 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using MyFinances.Database;
 using SQLitePCL;
-using System;
-using WordZone.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
