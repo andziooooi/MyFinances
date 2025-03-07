@@ -96,7 +96,6 @@
                                 
                             </td>
                         }
-
                     }
                 </tr>
             }
@@ -113,10 +112,9 @@
             var monthlyIncome = Model.monthlyIncomeSum.Sum();
             var monthlybalance = monthlyIncome - monthlyExpense;
         <label class="text-danger fs-5">wydatki: -@monthlyExpense</label>
-        <label class="text-success fs-5">Bilans miesiąca: @monthlybalance</label>
+        <label class="fs-5 @(monthlybalance >= 0 ? "text-success" : "text-danger")">Bilans miesiąca: @monthlybalance</label>
         <label class="text-success fs-5">przychód: @monthlyIncome</label>
     }
-
     </div>
 </div>
 <div class="modal fade" id="editModal" tabindex="-1">

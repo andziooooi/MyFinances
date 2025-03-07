@@ -1,0 +1,98 @@
+﻿@model MyFinances.Models.SummaryViewModel
+@{
+    ViewData["Title"] = "Podsumowanie";
+}
+
+<h2 class="text-center">Podsumowanie Finansowe</h2>
+<div class="align-items-center text-center">
+    <a class="btn btn-secondary" href="@Url.Action("Summary", new{type = 0})">Miesięczne</a>
+    <a class="btn btn-secondary" href="@Url.Action("Summary", new{type = 1})">Roczne</a>
+</div>
+<div class="d-flex justify-content-between mb-3">
+    @if(Model.Type ==0)
+    {
+        <a class="btn btn-primary" href="@Url.Action("Summary", Model.GetPreviousMonthParams(Model.Year,Model.Month))">← Poprzedni</a>
+        <h2>@Model.Month /@Model.Year</h2>
+        <a class="btn btn-primary" href="@Url.Action("Summary", Model.GetNextMonthParams(Model.Year,Model.Month))">Następny →</a>
+    }
+    else
+    {
+        <a class="btn btn-primary" href="@Url.Action("Summary",new {type = Model.Type,year = Model.Year-1})">← Poprzedni</a>
+        <h2>@Model.Year</h2>
+        <a class="btn btn-primary" href="@Url.Action("Summary", new {type = Model.Type,year = Model.Year+1})">Następny →</a>
+    }
+
+</div>
+<div class="card p-3 my-3">
+    <h4>Łączne zarobki: <span class="text-success fw-bold">@Model.IncomeSum zł</span></h4>
+    <h4>Łączne wydatki: <span class="text-danger fw-bold">@Model.ExpenseSum zł</span></h4>
+    <h4>
+        Bilans: <span class="fw-bold @(Model.IncomeSum - Model.ExpenseSum >= 0 ? "text-success" : "text-danger")">
+            @(Model.IncomeSum - Model.ExpenseSum) zł
+        </span>
+    </h4>
+</div>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Kategoria</th>
+            <th>Kwota</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if(Model.Categories != null)
+        {
+            foreach (var Category in Model.Categories)
+            {
+                var detailsId = "details_" + Category.ID;
+                string sum = "";
+                if(Category.Type == 1 && Category.Sum > 0)
+                {
+                    sum = "+" + Category.Sum + " zł";
+                }
+                else if(Category.Sum>0)
+                {
+                    sum = -Category.Sum + " zł";
+                }
+                else if(Category.Sum == 0)
+                {
+                    sum = "0";
+                }
+
+                <tr class="clickable-row" style="background-color:lightgray;" data-target="#@detailsId">
+                    <td style="text-align:center;font-weight:600">@Category.Name</td>
+                    <td class="@(Category.Type == 1 ? "text-success" : "text-danger")">@sum</td>
+                </tr>
+                <tr id="@detailsId" class="collapse">
+                    <td>
+                        <table class="table table-borderless">
+                            <tbody>
+                                @foreach (var transaction in Category.Transactions)
+                                {
+                                    <tr>
+                                        <td>@transaction.Date.ToString("d")</td>
+                                        <td style="text-align:right">@transaction.Amount</td>
+                                        <td>zł</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            }
+        }
+
+    </tbody>
+</table>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll(".clickable-row").forEach(row => {
+            row.addEventListener("click", function () {
+                let target = document.querySelector(this.dataset.target);
+                target.classList.toggle("show");
+            });
+        });
+    });
+</script>

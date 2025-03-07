@@ -31,7 +31,7 @@ namespace MyFinances.Database
         public List<Transactions> GetTransactionsByCategory(int categoryID, int UserID, DateTime RangeStart, DateTime RangeEnd)
         {
             List<Transactions> transactions = new List<Transactions>();
-            transactions = _context.Transactions.Where(item => item.CategoriesID == categoryID && item.UsersID == UserID && RangeStart<=item.Date && item.Date<=RangeEnd).ToList();
+            transactions = _context.Transactions.Where(item => item.CategoriesID == categoryID && item.UsersID == UserID && RangeStart<=item.Date && item.Date<=RangeEnd).OrderBy(item => item.Date).ToList();
             return transactions;
         }
         public List<Transactions> GetDailyTransactionsByType(int UserID, DateTime Day,int type)

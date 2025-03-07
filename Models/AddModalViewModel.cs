@@ -20,8 +20,7 @@ namespace MyFinances.Models
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             var errors = new List<ValidationResult>();
-
-            if (Category == 4)  // Jeśli wybrana kategoria to Wynagrodzenie (id=4)
+            if (Category == 4)
             {
                 if (!WorkedHours.HasValue || WorkedHours.Value <=0)
                 {
