@@ -6,11 +6,42 @@ function initializeEventHandlers() {
     $(document).on("click", ".edit-btn", handleEditClick);
     $(document).on("change", "#category", handleCategoryChange);
     $(document).on("submit", "#transactionForm", handleFormSubmit);
+    $(document).on("click", ".delete-btn", handleDeleteClick);
 }
-//sets date in EditModal
+//sets date in EditModal loading transactions to edit
 function handleEditClick() {
     var selectedDate = $(this).data("day");
     $("#hiddenDate").val(selectedDate);
+
+    let rawDate = selectedDate.split(' ')[0];
+    let formattedDate = rawDate.split('.').reverse().join('-');
+    let tbody = $("#editModal tbody");
+
+    // Wyczyść zawartość przed dodaniem nowych elementów
+    tbody.empty();
+
+    // Pobierz dane AJAX-em tylko dla wybranego `tbody`
+    $.get("/Calendar/GetItemsByDate", { date: formattedDate }, function (data) {
+        if (data.length === 0) {
+            tbody.append(`<tr><td colspan="4">Brak danych dla wybranej daty</td></tr>`);
+        } else {
+            console.log(data);
+            data.forEach(item => {
+                let rawDateToDisplay = item.date.split('T')[0];
+                let DateToDisplay = rawDateToDisplay.split('-').reverse().join('.');
+                tbody.append(`
+                        <tr id="row-${item.id}">
+                            <td>${DateToDisplay}</td>
+                            <td>${item.amount}</td>
+                            <td>${item.categoriesID}</td>
+                            <td>
+                                <button class="btn btn-danger delete-btn" data-id="${item.id}">Usuń</button>
+                            </td>
+                        </tr>
+                    `);
+            });
+        }
+    });
 }
 //choosing new transaction type
 function handleChooseClick() {
@@ -50,6 +81,18 @@ function loadTransactionModal(type) {
     $.get("/Calendar/LoadTransactionModal", { date: formattedDate, type: selectedType }, function (data) {
         $("#modalContainer").html(data);
         $("#addTransactionModal").modal("show");
+    });
+}
+//Delete Transaction from db
+function handleDeleteClick() {
+    var itemId = $(this).data("id");
+
+    $.post("/Calendar/Delete", { id: itemId }, function (response) {
+        if (response.success) {
+            $("#row-" + itemId).fadeOut();
+        } else {
+            alert(response.message);
+        }
     });
 }
 // Handles form submission via AJAX

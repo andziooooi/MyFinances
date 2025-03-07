@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MyFinances.Models;
 using MyFinances.Database;
+using Microsoft.EntityFrameworkCore;
 
 namespace MyFinances.Controllers
 {
@@ -58,7 +59,23 @@ namespace MyFinances.Controllers
                 _dataService.Add(transaction);
                 return Ok(new { success = true });
             }
+        }
+        [HttpPost]
+        public IActionResult Delete(int id)
+        {
+            var delete = _dataService.Delete(id);
+            if (!delete) 
+            { 
+                return Json(new { success = false, message = "Element nie znaleziony" }); 
+            }
+            return Json(new { success = true });
+        }
+        [HttpGet]
+        public IActionResult GetItemsByDate(DateTime date)
+        {
+            var items = _dataService.GetTransactions(date);
 
+            return Json(items);
         }
     }
 

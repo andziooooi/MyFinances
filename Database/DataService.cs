@@ -19,9 +19,24 @@ namespace MyFinances.Database
             _context.SaveChanges();
             
         }
+        public bool Delete(int ID) 
+        {
+            var TransToDelete= _context.Transactions.Find(ID);
+            if (TransToDelete != null) 
+            {
+                _context.Transactions.Remove(TransToDelete);
+                _context.SaveChanges();
+                return true;
+            }
+            return false;
+        }
         public List<Categories> GetCategories()
         {
             return _context.Categories.ToList();
+        }
+        public List<Transactions> GetTransactions(DateTime date) 
+        {
+            return _context.Transactions.Where(item=>item.Date == date && item.UsersID == 1).ToList();
         }
 
         public List<Categories> GetCategoriesByType(int type)
@@ -59,6 +74,5 @@ namespace MyFinances.Database
                 .ToList();
             return transactions;
         }
-
     }
 }
