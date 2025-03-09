@@ -1,5 +1,7 @@
-﻿$(document).ready(function () {
+﻿var IsChanged = false;
+$(document).ready(function () {
     initializeEventHandlers();
+    console.log("Przeładowana");
 });
 function initializeEventHandlers() {
     $(document).on("click", ".choose-btn", handleChooseClick);
@@ -8,6 +10,7 @@ function initializeEventHandlers() {
     $(document).on("submit", "#transactionForm", handleFormSubmit);
     $(document).on("click", ".delete-btn", handleDeleteClick);
     $(document).on("click", ".switch-modal-btn", handleModalSwitch);
+    $(document).on("click", ".close-modal", handleListChangeClick);
 }
 //sets date in EditModal loading transactions to edit
 function handleEditClick() {
@@ -19,11 +22,9 @@ function handleEditClick() {
     let tbody = $("#editModal tbody");
     let dateHeader = $("#editModal h3")
 
-    // Wyczyść zawartość przed dodaniem nowych elementów
     tbody.empty();
     dateHeader.empty();
 
-    // Pobierz dane AJAX-em tylko dla wybranego `tbody`
     $.get("/Calendar/GetItemsByDate", { date: formattedDate }, function (data) {
         dateHeader.append(rawDate);
         if (data.length === 0) {
@@ -97,6 +98,7 @@ function handleDeleteClick() {
     $.post("/Calendar/Delete", { id: itemId }, function (response) {
         if (response.success) {
             $("#row-" + itemId).fadeOut();
+            IsChanged = true;
         } else {
             alert(response.message);
         }
@@ -122,14 +124,21 @@ function handleFormSubmit(e) {
         console.error("Błąd podczas zapisu:", xhr);
     });
 }
+//Handles modal dependence
 function handleModalSwitch() {
     var hideModal = $(this).data("hide");
     var showModal = $(this).data("show");
 
-    $(hideModal).modal("hide"); // Zamknij obecny modal
+    $(hideModal).modal("hide"); 
 
-    $(hideModal).on("hidden.bs.modal", function () { // Po zamknięciu otwórz nowy
+    $(hideModal).on("hidden.bs.modal", function () {
         $(showModal).modal("show");
-        $(hideModal).off("hidden.bs.modal"); // Usuń event listener, żeby nie dublował
+        $(hideModal).off("hidden.bs.modal");
     });
+}
+//reloads site when list of transaction was changed
+function handleListChangeClick() {
+    if (IsChanged) {
+        location.reload();
+    }
 }

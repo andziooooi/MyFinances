@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MyFinances.Models;
 using MyFinances.Database;
-using Microsoft.EntityFrameworkCore;
 
 namespace MyFinances.Controllers
 {
