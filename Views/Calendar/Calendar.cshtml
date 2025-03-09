@@ -127,21 +127,25 @@
             <div class="modal-body text-center">
                 <input type="hidden" id="hiddenDate"/>
                 <button type="button" class="btn btn-danger border-2 choose-btn"
-                        data-type="0">
+                        data-type="0"
+                        data-bs-dismiss="modal"
+                        data-bs-target="#editModal">
                     Wydatek
                 </button>
                 <button type="button" class="btn btn-success border-2 choose-btn"
-                        data-type="1">
+                        data-type="1"
+                        data-bs-dismiss="modal"
+                        data-bs-target="#editModal">
                     Przychód
                 </button>
-                <h2>Lista przedmiotów</h2>
+                <h2>Lista transakcji</h2>
+                <h3></h3>
                 <table class="table">
                     <thead>
                         <tr>
-                            <th>ID</th>
-                            <th>Tytuł</th>
-                            <th>Opis</th>
-                            <th>Akcje</th>
+                            <th>Kategoria</th>
+                            <th>Kwota</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>

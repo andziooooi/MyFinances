@@ -7,6 +7,7 @@ function initializeEventHandlers() {
     $(document).on("change", "#category", handleCategoryChange);
     $(document).on("submit", "#transactionForm", handleFormSubmit);
     $(document).on("click", ".delete-btn", handleDeleteClick);
+    $(document).on("click", ".switch-modal-btn", handleModalSwitch);
 }
 //sets date in EditModal loading transactions to edit
 function handleEditClick() {
@@ -16,24 +17,30 @@ function handleEditClick() {
     let rawDate = selectedDate.split(' ')[0];
     let formattedDate = rawDate.split('.').reverse().join('-');
     let tbody = $("#editModal tbody");
+    let dateHeader = $("#editModal h3")
 
     // Wyczyść zawartość przed dodaniem nowych elementów
     tbody.empty();
+    dateHeader.empty();
 
     // Pobierz dane AJAX-em tylko dla wybranego `tbody`
     $.get("/Calendar/GetItemsByDate", { date: formattedDate }, function (data) {
+        dateHeader.append(rawDate);
         if (data.length === 0) {
             tbody.append(`<tr><td colspan="4">Brak danych dla wybranej daty</td></tr>`);
         } else {
             console.log(data);
             data.forEach(item => {
-                let rawDateToDisplay = item.date.split('T')[0];
-                let DateToDisplay = rawDateToDisplay.split('-').reverse().join('.');
+                let AmountToDisplay = item.amount;
+                let textclass = "text-success";
+                if (item.category.type == 0) {
+                    AmountToDisplay = -AmountToDisplay;
+                    textclass = "text-danger";
+                }
                 tbody.append(`
                         <tr id="row-${item.id}">
-                            <td>${DateToDisplay}</td>
-                            <td>${item.amount}</td>
-                            <td>${item.categoriesID}</td>
+                            <td>${item.category.name}</td>
+                            <td class = "${textclass}">${AmountToDisplay}</td>
                             <td>
                                 <button class="btn btn-danger delete-btn" data-id="${item.id}">Usuń</button>
                             </td>
@@ -113,5 +120,16 @@ function handleFormSubmit(e) {
         }
     }).fail(function (xhr) {
         console.error("Błąd podczas zapisu:", xhr);
+    });
+}
+function handleModalSwitch() {
+    var hideModal = $(this).data("hide");
+    var showModal = $(this).data("show");
+
+    $(hideModal).modal("hide"); // Zamknij obecny modal
+
+    $(hideModal).on("hidden.bs.modal", function () { // Po zamknięciu otwórz nowy
+        $(showModal).modal("show");
+        $(hideModal).off("hidden.bs.modal"); // Usuń event listener, żeby nie dublował
     });
 }

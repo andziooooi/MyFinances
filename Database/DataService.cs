@@ -36,7 +36,7 @@ namespace MyFinances.Database
         }
         public List<Transactions> GetTransactions(DateTime date) 
         {
-            return _context.Transactions.Where(item=>item.Date == date && item.UsersID == 1).ToList();
+            return _context.Transactions.Include(item=> item.Category).Where(item=>item.Date == date && item.UsersID == 1).ToList();
         }
 
         public List<Categories> GetCategoriesByType(int type)

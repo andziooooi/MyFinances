@@ -74,6 +74,7 @@ namespace MyFinances.Controllers
         public IActionResult GetItemsByDate(DateTime date)
         {
             var items = _dataService.GetTransactions(date);
+            //Console.WriteLine(items[0].Category.Name);
 
             return Json(items);
         }
