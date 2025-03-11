@@ -21,6 +21,11 @@ namespace MyFinances.Models
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             var errors = new List<ValidationResult>();
+            if(Category == 0)
+            {
+                errors.Add(new ValidationResult("Należy wybrać kategorie.", new[] { nameof(Category) }));
+                return errors;
+            }
             if (Category == 4)
             {
                 if (!WorkedHours.HasValue || WorkedHours.Value <=0)
