@@ -4,14 +4,14 @@
     ViewData["Title"] = "Kalendarz";
 }
 
-<h1>Kalendarz Finansów</h1>
+<h1 class="text-center m-3">Kalendarz Finansów</h1>
 <div class="d-flex justify-content-between mb-3">
     <a class="btn btn-primary" href="@Url.Action("Calendar", Model.GetPreviousMonthParams(Model.Year,Model.Month))">Poprzedni miesiąc</a>
-    <h2>@Model.Month /@Model.Year</h2>
+    <h2>@Model.Month / @Model.Year</h2>
     <a class="btn btn-primary" href="@Url.Action("Calendar", Model.GetNextMonthParams(Model.Year,Model.Month))">Następny miesiąc</a>
 </div>
 
-<table class="table table-bordered text-center" style="min-width:750px">
+<table class="table table-bordered text-center">
     <thead>
         <tr>
             <th>Poniedziałek</th>

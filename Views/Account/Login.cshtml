@@ -2,18 +2,23 @@
     ViewData["Title"] = "Logowanie";
 }
 
-<h2 class="text-center">Logowanie</h2>
+<h1 class="text-center m-3">Zaloguj się!</h1>
 
 <div class="d-flex justify-content-center">
-    <form class="w-50 border p-4 rounded">
+    <form class="w-50 border p-4 rounded" method="post">
+        @if (ViewBag.Error != null)
+        {
+            <div class="alert alert-danger">@ViewBag.Error</div>
+        }
         <div class="mb-3">
-            <label class="form-label">E-mail</label>
-            <input type="email" class="form-control" placeholder="Wpisz e-mail">
+            <label class="form-label">Login</label>
+            <input type="text" name="login" class="form-control" placeholder="Login" pattern="[A-Za-z0-9]+" required>
         </div>
         <div class="mb-3">
             <label class="form-label">Hasło</label>
-            <input type="password" class="form-control" placeholder="Wpisz hasło">
+            <input type="password" name="password" class="form-control" placeholder="Hasło" required>
         </div>
-        <button class="btn btn-primary w-100">Zaloguj się</button>
+        <button type="submit" class="btn btn-primary w-100">Zaloguj się</button>
+        <p class="text-center mt-3"><a href="@Url.Action("Register", "Account")">Nie masz konta? Zarejestruj się</a></p>
     </form>
 </div>

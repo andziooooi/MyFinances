@@ -1,0 +1,33 @@
+﻿@{
+    ViewData["Title"] = "Rejestracja";
+}
+
+<h1 class="text-center m-3">Rejestracja</h1>
+
+<div class="d-flex justify-content-center">
+    <form class="w-50 border p-4 rounded" method="post">
+        @if (ViewBag.Error != null)
+        {
+            <div class="alert alert-danger">@ViewBag.Error</div>
+        }
+        <div class="mb-3">
+            <label class="form-label">E-mail</label>
+            <input type="email" name="email" class="form-control" placeholder="example@Host.com" pattern="[A-Za-z0-9.@@]*" required>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Login</label>
+            <input type="text" name="login" class="form-control" placeholder="Login" pattern="[A-Za-z0-9]+" required>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Hasło</label>
+            <input type="password" name="password" class="form-control" placeholder="Hasło" required>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Powtórz hasło</label>
+            <input type="password" name="passwordRepeat" class="form-control" placeholder="Powtórz hasło" required>
+        </div>
+        <button type="submit" class="btn btn-success w-100">Zarejestruj się</button>
+        <p class="text-center mt-3"><a href="@Url.Action("Login", "Account")">Masz już konto? Zaloguj się</a></p>
+    </form>
+</div>
+

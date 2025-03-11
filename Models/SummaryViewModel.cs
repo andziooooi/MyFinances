@@ -12,8 +12,10 @@ namespace MyFinances.Models
         public List<Categories> Categories { get; set; }
         public double IncomeSum { get; set; } 
         public double ExpenseSum { get; set; }
-        public SummaryViewModel(int type,int year, int month,DataService ds)
+        private int UserID {  get; set; }
+        public SummaryViewModel(int type,int year, int month,DataService ds,int userID)
         {
+            UserID = userID;
             Type = type;
             Year = year;
             Month = month;
@@ -23,7 +25,7 @@ namespace MyFinances.Models
             Categories = ds.GetCategories();
             foreach (var c in Categories)
             {
-                c.Transactions = ds.GetTransactionsByCategory(c.ID, 1, SummaryRangeStart, SummaryRangeEnd);
+                c.Transactions = ds.GetTransactionsByCategory(c.ID, UserID, SummaryRangeStart, SummaryRangeEnd);
                 c.Sum = SumTransactions(c.Transactions);
                 if (c.Type == 1)
                 {
@@ -35,8 +37,9 @@ namespace MyFinances.Models
                 }
             }
         }
-        public SummaryViewModel(int type, int year, DataService ds)
+        public SummaryViewModel(int type, int year, DataService ds,int userID)
         {
+            UserID = userID;
             Type = type;
             Year = year;
             SummaryRangeStart = new DateTime(Year, 1, 1);
@@ -45,7 +48,7 @@ namespace MyFinances.Models
             Categories = ds.GetCategories();
             foreach (var c in Categories)
             {
-                c.Transactions = ds.GetTransactionsByCategory(c.ID, 1, SummaryRangeStart, SummaryRangeEnd);
+                c.Transactions = ds.GetTransactionsByCategory(c.ID, UserID, SummaryRangeStart, SummaryRangeEnd);
                 c.Sum = SumTransactions(c.Transactions);
                 if (c.Type == 1)
                 {

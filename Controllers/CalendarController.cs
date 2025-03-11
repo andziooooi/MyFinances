@@ -14,11 +14,14 @@ namespace MyFinances.Controllers
         }
         public IActionResult Calendar(int? year, int? month)
         {
+            if(HttpContext.Session.GetInt32("UserID") == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
             int currentYear = year ?? DateTime.Now.Year;
             int currentMonth = month ?? DateTime.Now.Month;
-
-            var model = new CalendarViewModel(currentYear, currentMonth, _dataService);
-
+            int userID = (int)HttpContext.Session.GetInt32("UserID")!;
+            var model = new CalendarViewModel(currentYear, currentMonth, _dataService,userID);
             return View(model);
         }
         [HttpGet]
@@ -29,7 +32,8 @@ namespace MyFinances.Controllers
                 TransactionType = type,
                 HiddenDate = date,
                 ExpenseCategories = _dataService.GetCategoriesByType(0),
-                IncomeCategories = _dataService.GetCategoriesByType(1)
+                IncomeCategories = _dataService.GetCategoriesByType(1),
+                UserID = (int)HttpContext.Session.GetInt32("UserID")!
             };
             return PartialView("_TransactionModal", model);
         }
@@ -52,7 +56,7 @@ namespace MyFinances.Controllers
                     Date = model.HiddenDate,
                     Amount = model.Category == 4 ? (model.PayPerHour ?? 0) * (model.WorkedHours ?? 0) : (model.Amount ?? 0),
                     CategoriesID = model.Category,
-                    UsersID = 1
+                    UsersID = model.UserID
                 };
 
                 _dataService.Add(transaction);
@@ -65,16 +69,15 @@ namespace MyFinances.Controllers
             var delete = _dataService.Delete(id);
             if (!delete) 
             { 
-                return Json(new { success = false, message = "Element nie znaleziony" }); 
+                return Json(new { success = false, message = "Element nieznaleziony" }); 
             }
             return Json(new { success = true });
         }
         [HttpGet]
         public IActionResult GetItemsByDate(DateTime date)
         {
-            var items = _dataService.GetTransactions(date);
-            //Console.WriteLine(items[0].Category.Name);
-
+            int userID = (int)HttpContext.Session.GetInt32("UserID")!;
+            var items = _dataService.GetTransactions(date,userID);
             return Json(items);
         }
     }

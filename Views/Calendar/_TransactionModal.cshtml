@@ -14,6 +14,7 @@
             <div class="modal-body">
                 <form id="transactionForm">
                     <input type="hidden" id="hiddenDate" name="HiddenDate" value="@Model.HiddenDate">
+                    <input type="hidden" id="userID" name="UserID" value="@Model.UserID">
 
                     <label for="category">Kategoria</label>
                     <select id="category" name="Category" class="form-select">
@@ -33,7 +34,7 @@
 
                     <div>
                         <label for="workedHours" style="display:none">Przepracowane godziny</label>
-                        <input type="hidden" id="workedHours" name="WorkedHours" class="form-control">
+                        <input type="hidden" id="workedHours" name="WorkedHours" class="form-control" title="Tylko pełne godziny" pattern="[0-9]+">
                         <span id="WorkedHoursError" class="text-danger error-label" style="display:none;"></span>
 
                     </div>

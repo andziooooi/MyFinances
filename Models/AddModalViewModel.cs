@@ -13,6 +13,7 @@ namespace MyFinances.Models
         public double? PayPerHour { get; set; }
         public int TransactionType = 1;
         public int Category { get; set; }
+        public int UserID {  get; set; }
 
         public List<Categories>? ExpenseCategories { get; set; }
         public List<Categories>? IncomeCategories { get; set; }

@@ -19,6 +19,29 @@ namespace MyFinances.Database
             _context.SaveChanges();
             
         }
+        public Users Login(string login, string password)
+        {
+            return _context.Users.FirstOrDefault(u => (u.Login == login || u.Email == login) && u.Password == password)!;
+        }
+        public int CheckRegister(string login, string email)
+        {
+            Console.WriteLine(_context.Users.Any(u => u.Login == login).ToString());
+            if(_context.Users.Any(u => u.Email == email))
+            {
+                return 1;
+            }
+            if(_context.Users.Any(u=>u.Login == login))
+            {
+                return 2;
+            }
+            return 0;
+        }
+        public void Register(string login, string email,string password)
+        {
+            var user = new Users {Login = login ,Email = email, Password = password};
+            _context.Users.Add(user);
+            _context.SaveChanges();
+        }
         public bool Delete(int ID) 
         {
             var TransToDelete= _context.Transactions.Find(ID);
@@ -34,9 +57,9 @@ namespace MyFinances.Database
         {
             return _context.Categories.ToList();
         }
-        public List<Transactions> GetTransactions(DateTime date) 
+        public List<Transactions> GetTransactions(DateTime date,int userID) 
         {
-            return _context.Transactions.Include(item=> item.Category).Where(item=>item.Date == date && item.UsersID == 1).ToList();
+            return _context.Transactions.Include(item=> item.Category).Where(item=>item.Date == date && item.UsersID == userID).ToList();
         }
 
         public List<Categories> GetCategoriesByType(int type)

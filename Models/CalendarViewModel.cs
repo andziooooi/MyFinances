@@ -1,11 +1,10 @@
-﻿
-using MyFinances.Database;
-
+﻿using MyFinances.Database;
 
 namespace MyFinances.Models
 {
     public class CalendarViewModel
     {
+        private int UserID {  get; set; }
         public int Year { get; set; }
         public int Month { get; set; }
         public List<DateTime> Days { get; set; } = new List<DateTime>();
@@ -15,17 +14,18 @@ namespace MyFinances.Models
         public List<double> monthlyIncomeSum { get; set; } = new List<double>();
         public List<double> monthlyExpenseSum { get; set; } = new List<double>();
 
-        public CalendarViewModel(int year, int month,DataService ds)
+        public CalendarViewModel(int year, int month,DataService ds,int userID)
         {
+            UserID = userID;
             Year = year;
             Month = month;
             GenerateCalendar();
-            monthlyIncomeSum = ds.GetMonthlyTransactionsAmountsByType(1, new DateTime(Year, Month, 1), new DateTime(Year, Month, DateTime.DaysInMonth(Year, Month)),1);
-            monthlyExpenseSum = ds.GetMonthlyTransactionsAmountsByType(1, new DateTime(Year, Month, 1), new DateTime(Year, Month, DateTime.DaysInMonth(Year, Month)), 0);
+            monthlyIncomeSum = ds.GetMonthlyTransactionsAmountsByType(UserID, new DateTime(Year, Month, 1), new DateTime(Year, Month, DateTime.DaysInMonth(Year, Month)),1);
+            monthlyExpenseSum = ds.GetMonthlyTransactionsAmountsByType(UserID, new DateTime(Year, Month, 1), new DateTime(Year, Month, DateTime.DaysInMonth(Year, Month)), 0);
             foreach (DateTime day in Days)
             {
-                var IncomeTrans = ds.GetDailyTransactionsByType(1, day.Date, 1);
-                var OutcomeTrans = ds.GetDailyTransactionsByType(1, day.Date, 0);
+                var IncomeTrans = ds.GetDailyTransactionsByType(UserID, day.Date, 1);
+                var OutcomeTrans = ds.GetDailyTransactionsByType(UserID, day.Date, 0);
                 double DailyIncomeSum = 0;
                 double DailyOutcomeSum = 0;
                 if(IncomeTrans !=null)
