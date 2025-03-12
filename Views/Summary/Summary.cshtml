@@ -8,11 +8,11 @@
     <a class="btn btn-secondary" href="@Url.Action("Summary", new{type = 0})">Miesięczne</a>
     <a class="btn btn-secondary" href="@Url.Action("Summary", new{type = 1})">Roczne</a>
 </div>
-<div class="d-flex justify-content-between mb-3">
+<div class="d-flex justify-content-between m-3">
     @if(Model.Type ==0)
     {
         <a class="btn btn-primary" href="@Url.Action("Summary", Model.GetPreviousMonthParams(Model.Year,Model.Month))">← Poprzedni</a>
-        <h2>@Model.Month /@Model.Year</h2>
+        <h2>@Model.Month / @Model.Year</h2>
         <a class="btn btn-primary" href="@Url.Action("Summary", Model.GetNextMonthParams(Model.Year,Model.Month))">Następny →</a>
     }
     else
@@ -23,6 +23,7 @@
     }
 
 </div>
+<canvas id="financeChart"></canvas>
 <div class="card p-3 my-3">
     <h4>Łączne zarobki: <span class="text-success fw-bold">@Model.IncomeSum zł</span></h4>
     <h4>Łączne wydatki: <span class="text-danger fw-bold">@Model.ExpenseSum zł</span></h4>
@@ -86,13 +87,13 @@
     </tbody>
 </table>
 
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        document.querySelectorAll(".clickable-row").forEach(row => {
-            row.addEventListener("click", function () {
-                let target = document.querySelector(this.dataset.target);
-                target.classList.toggle("show");
-            });
-        });
-    });
-</script>
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        var labels = @Html.Raw(Json.Serialize(Model.Labels));
+        var expenses = @Html.Raw(Json.Serialize(Model.ExpenseList));
+        var income = @Html.Raw(Json.Serialize(Model.IncomeList));
+        var currentLabel = @Model.LabelPointer;
+    </script>
+    <script src="~/js/Summary.js" asp-append-version="true"></script>
+}

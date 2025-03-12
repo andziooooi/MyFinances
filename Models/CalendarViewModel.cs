@@ -20,8 +20,8 @@ namespace MyFinances.Models
             Year = year;
             Month = month;
             GenerateCalendar();
-            monthlyIncomeSum = ds.GetMonthlyTransactionsAmountsByType(UserID, new DateTime(Year, Month, 1), new DateTime(Year, Month, DateTime.DaysInMonth(Year, Month)),1);
-            monthlyExpenseSum = ds.GetMonthlyTransactionsAmountsByType(UserID, new DateTime(Year, Month, 1), new DateTime(Year, Month, DateTime.DaysInMonth(Year, Month)), 0);
+            monthlyIncomeSum = ds.GetTransactionsAmountsByType(UserID, new DateTime(Year, Month, 1), new DateTime(Year, Month, DateTime.DaysInMonth(Year, Month)),1);
+            monthlyExpenseSum = ds.GetTransactionsAmountsByType(UserID, new DateTime(Year, Month, 1), new DateTime(Year, Month, DateTime.DaysInMonth(Year, Month)), 0);
             foreach (DateTime day in Days)
             {
                 var IncomeTrans = ds.GetDailyTransactionsByType(UserID, day.Date, 1);
