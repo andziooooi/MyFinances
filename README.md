@@ -50,5 +50,5 @@
 
 ## Future Enhancements
 
-🚀 **Custom Categories** – Users will be able to create and manage their own spending categories.
+🚀 **Custom Categories** – Users will be able to create and manage their own spending categories.<br>
 📊 **Budgeting Tools** – Set financial goals and track progress.
