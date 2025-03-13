@@ -8,7 +8,6 @@ namespace MyFinances.Models
         public int Year { get; set; }
         public int Month { get; set; }
         public List<DateTime> Days { get; set; } = new List<DateTime>();
-        public DateTime hiddenDate { get; set; }
         public List<double> dayIncomeSum { get; set; } = new List<double>();
         public List<double> dayExpenseSum { get; set; } = new List<double>();
         public List<double> monthlyIncomeSum { get; set; } = new List<double>();

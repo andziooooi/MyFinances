@@ -23,7 +23,7 @@
     }
 
 </div>
-<canvas id="financeChart"></canvas>
+<canvas id="financeChart" style="max-height: 40%;"></canvas>
 <div class="card p-3 my-3">
     <h4>Łączne zarobki: <span class="text-success fw-bold">@Model.IncomeSum zł</span></h4>
     <h4>Łączne wydatki: <span class="text-danger fw-bold">@Model.ExpenseSum zł</span></h4>
@@ -34,11 +34,12 @@
     </h4>
 </div>
 
-<table class="table table-bordered">
+<table class="table" style="background-color:rgba(245, 245, 245, 0.8)">
     <thead>
         <tr>
             <th>Kategoria</th>
             <th>Kwota</th>
+            <th style="width:30px;"></th>
         </tr>
     </thead>
     <tbody>
@@ -61,9 +62,10 @@
                     sum = "0";
                 }
 
-                <tr class="clickable-row" style="background-color:lightgray;" data-target="#@detailsId">
+                <tr class="clickable-row" style="background-color:rgba(230, 230, 230, 0.8);" data-target="#@detailsId">
                     <td style="text-align:center;font-weight:600">@Category.Name</td>
                     <td class="@(Category.Type == 1 ? "text-success" : "text-danger")">@sum</td>
+                    <td class="arrow-icon" style="width:30px;">&or;</td>
                 </tr>
                 <tr id="@detailsId" class="collapse">
                     <td>

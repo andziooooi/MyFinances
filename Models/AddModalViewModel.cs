@@ -11,7 +11,8 @@ namespace MyFinances.Models
 
         public int? WorkedHours { get; set; }
         public double? PayPerHour { get; set; }
-        public int TransactionType = 1;
+
+        public int TransactionType;
         public int Category { get; set; }
         public int UserID {  get; set; }
 
@@ -26,7 +27,7 @@ namespace MyFinances.Models
                 errors.Add(new ValidationResult("Należy wybrać kategorie.", new[] { nameof(Category) }));
                 return errors;
             }
-            if (Category == 4)
+            if (Category == 1)
             {
                 if (!WorkedHours.HasValue || WorkedHours.Value <=0)
                 {

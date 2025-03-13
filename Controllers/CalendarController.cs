@@ -24,8 +24,9 @@ namespace MyFinances.Controllers
             var model = new CalendarViewModel(currentYear, currentMonth, _dataService,userID);
             return View(model);
         }
+        //HttpGet for loading Modal to adding transaction
         [HttpGet]
-        public IActionResult LoadTransactionModal(DateTime date, int type)
+        public IActionResult LoadAddTransactionModal(DateTime date, int type)
         {
             var model = new AddModalViewModel
             {
@@ -35,10 +36,11 @@ namespace MyFinances.Controllers
                 IncomeCategories = _dataService.GetCategoriesByType(1),
                 UserID = (int)HttpContext.Session.GetInt32("UserID")!
             };
-            return PartialView("_TransactionModal", model);
+            return PartialView("AddTransactionModal", model);
         }
+        //HttpPost for adding transaction
         [HttpPost]
-        public IActionResult AddEntry(AddModalViewModel model)
+        public IActionResult AddTransaction(AddModalViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -54,7 +56,7 @@ namespace MyFinances.Controllers
                 var transaction = new Transactions
                 {
                     Date = model.HiddenDate,
-                    Amount = model.Category == 4 ? (model.PayPerHour ?? 0) * (model.WorkedHours ?? 0) : (model.Amount ?? 0),
+                    Amount = model.Category == 1 ? (model.PayPerHour ?? 0) * (model.WorkedHours ?? 0) : (model.Amount ?? 0),
                     CategoriesID = model.Category,
                     UsersID = model.UserID
                 };
@@ -63,6 +65,7 @@ namespace MyFinances.Controllers
                 return Ok(new { success = true });
             }
         }
+        //HttpPost for deleting transaction
         [HttpPost]
         public IActionResult Delete(int id)
         {
@@ -73,6 +76,7 @@ namespace MyFinances.Controllers
             }
             return Json(new { success = true });
         }
+        //HttpGet for getting items to Edit Modal
         [HttpGet]
         public IActionResult GetItemsByDate(DateTime date)
         {

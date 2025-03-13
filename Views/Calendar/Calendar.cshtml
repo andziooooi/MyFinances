@@ -10,98 +10,99 @@
     <h2>@Model.Month / @Model.Year</h2>
     <a class="btn btn-primary" href="@Url.Action("Calendar", Model.GetNextMonthParams(Model.Year,Model.Month))">Następny miesiąc</a>
 </div>
+<div class="card m-1"style="overflow-x:auto;align-items:center;align-items:center">
+    <table class="table text-center m-1" style="width:95%">
+        <thead>
+            <tr>
+                <th>Poniedziałek</th>
+                <th>Wtorek</th>
+                <th>Środa</th>
+                <th>Czwartek</th>
+                <th>Piątek</th>
+                <th>Sobota</th>
+                <th>Niedziela</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int dayCounter = 0;
+                bool SixWeeks = false;
+                string textclass = "";
+                string divclass = "";
+                for (int i = 0; i < 6; i++) // 6 weeks
+                {
+                    <tr class="p-0">
+                        @for (int j = 0; j < 7; j++) // 7 days
+                        {
+                            var incomesum = Model.dayIncomeSum[dayCounter];
+                            var expensesum = Model.dayExpenseSum[dayCounter];
+                            double dailyBalance = incomesum - expensesum;
+                            var day = Model.Days[dayCounter++];
+                            if (day.Month == Model.Month)
+                            {
+                                textclass = "text-dark";
+                                divclass = "specialhover";
+                            }
+                            else
+                            {
+                                textclass = "text-muted";
+                                divclass = "";
+                            }
+                            if (i == 5 && j == 0 && textclass == "text-dark")
+                            {
+                                SixWeeks = true;
+                            }
+                            if (i != 5 || SixWeeks)
+                            {
+                                <td class="@textclass @divclass p-0 position-relative" style="height: 130px;">
 
-<table class="table table-bordered text-center">
-    <thead>
-        <tr>
-            <th>Poniedziałek</th>
-            <th>Wtorek</th>
-            <th>Środa</th>
-            <th>Czwartek</th>
-            <th>Piątek</th>
-            <th>Sobota</th>
-            <th>Niedziela</th>
-        </tr>
-    </thead>
-    <tbody>
-        @{
-            int dayCounter = 0;
-            bool SixWeeks = false;
-            string textclass = "";
-            string divclass = "";
-            for (int i = 0; i < 6; i++) // 6 tygodni
-            {
-                <tr class="p-0">
-                    @for (int j = 0; j < 7; j++) // 7 dni
-                    {
-                        var incomesum = Model.dayIncomeSum[dayCounter];
-                        var expensesum = Model.dayExpenseSum[dayCounter];
-                        double dailyBalance = incomesum - expensesum;
-                        var day = Model.Days[dayCounter++];      
-                        if(day.Month == Model.Month)
-                        {
-                            textclass = "text-dark";
-                            divclass = "specialhover";
-                        }
-                        else
-                        {
-                            textclass = "text-muted";
-                            divclass = "";
-                        }
-                        if (i == 5 && j == 0 && textclass == "text-dark")
-                        {
-                            SixWeeks = true;
-                        }
-                        if(i != 5 || SixWeeks)
-                        {
-                            <td class="@textclass @divclass p-0 position-relative" style="height: 130px;">
+                                    <!-- Edition Button -->
+                                    @if (textclass != "text-muted")
+                                    {
+                                        <div class="position-absolute top-0 end-0 p-0">
+                                            <button type="button" class="btn btn-sm btn-outline-secondary border-0 opacity-75 edit-btn"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#editModal"
+                                                    data-day="@day.Date">
+                                                ✏
+                                            </button>
 
-                                <!-- Edition Button -->
-                                @if (textclass != "text-muted")
-                                {
-                                    <div class="position-absolute top-0 end-0 p-0">
-                                        <button type="button" class="btn btn-sm btn-outline-secondary border-0 opacity-75 edit-btn"
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#editModal"
-                                                data-day="@day.Date">
-                                            ✏
-                                        </button>
+                                        </div>
+                                    }
 
+                                    <!-- Day and details -->
+                                    <div class="flex-row d-flex h-60">
+                                        <!--Details -->
+                                        <div class="flex-column w-100 align-items-center justify-content-center div1" style="margin-top:10px;">
+                                            @if (textclass != "text-muted")
+                                            {
+                                                <label class="text-success">@incomesum</label>
+                                                <label class="text-danger">-@expensesum</label>
+
+                                            }
+                                        </div>
+                                        <!--Day -->
+                                        <div class="d-flex flex-column w-100 h-60 align-items-center justify-content-center" style="margin-top:15px;">
+                                            <label class="fs-2">@day.Day</label>
+                                        </div>
                                     </div>
-                                }
-
-                                <!-- Day and details -->
-                                <div class="flex-row d-flex h-60">
-                                    <!--Details -->
-                                    <div class="flex-column w-100 align-items-center justify-content-center div1" style="margin-top:10px;">
-                                        @if (textclass != "text-muted")
+                                    <!-- Work hours and daily balance-->
+                                    <div class="d-flex flex-column align-items-center h-40">
+                                        @if (textclass!= "text-muted")
                                         {
-                                            <label class="text-success">@incomesum</label>
-                                            <label class="text-danger">-@expensesum</label>
-                                            
+                                            <label>Bilans: @dailyBalance</label>
                                         }
                                     </div>
-                                    <!--Day -->
-                                    <div class="d-flex flex-column w-100 h-60 align-items-center justify-content-center" style="margin-top:15px;">
-                                        <label class="fs-2">@day.Day</label>
-                                    </div>
-                                </div>
-                                <!-- Work hours and daily balance-->
-                                <div class="d-flex flex-column align-items-center h-40">
-                                    @if (textclass!= "text-muted")
-                                    {
-                                        <label>Bilans: @dailyBalance</label>
-                                    } 
-                                </div>
-                                
-                            </td>
+
+                                </td>
+                            }
                         }
-                    }
-                </tr>
+                    </tr>
+                }
             }
-        }
-    </tbody>
-</table>
+        </tbody>
+    </table>
+</div>
 <div class="card p-2">
     <div class="text-center w-100">
         <h2>Podsumowanie miesiąca</h2>
@@ -117,6 +118,7 @@
     }
     </div>
 </div>
+<!--Modal with editing transactions -->
 <div class="modal fade" id="editModal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -158,6 +160,7 @@
         </div>
     </div>
 </div>
+<!--Container for modal with adding transaction -->
 <div id="modalContainer"></div>
 
 @section Scripts {

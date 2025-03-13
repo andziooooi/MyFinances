@@ -1,7 +1,6 @@
 ﻿var IsChanged = false;
 $(document).ready(function () {
     initializeEventHandlers();
-    console.log("Przeładowana");
 });
 function initializeEventHandlers() {
     $(document).on("click", ".choose-btn", handleChooseClick);
@@ -28,9 +27,8 @@ function handleEditClick() {
     $.get("/Calendar/GetItemsByDate", { date: formattedDate }, function (data) {
         dateHeader.append(rawDate);
         if (data.length === 0) {
-            tbody.append(`<tr><td colspan="4">Brak danych dla wybranej daty</td></tr>`);
+            tbody.append(`<tr><td colspan="4">Brak transakcji dla wybranej daty</td></tr>`);
         } else {
-            console.log(data);
             data.forEach(item => {
                 let AmountToDisplay = item.amount;
                 let textclass = "text-success";
@@ -59,7 +57,9 @@ function handleChooseClick() {
 //Handles the category change event
 function handleCategoryChange() {
     var selectedCategory = $(this).val();
-    var specialCategoryId = "4"; //id of salary category
+    var specialCategoryId = "1"; //id of salary category
+    console.log(selectedCategory);
+    console.log(specialCategoryId);
 
     //clear inputs
     $("#amount").val('');
@@ -85,8 +85,7 @@ function loadTransactionModal(type) {
     let selectedType = type
     let rawDate = selectedDate.split(' ')[0];
     let formattedDate = rawDate.split('.').reverse().join('-');
-    console.log("wysłana data:", formattedDate)
-    $.get("/Calendar/LoadTransactionModal", { date: formattedDate, type: selectedType }, function (data) {
+    $.get("/Calendar/LoadAddTransactionModal", { date: formattedDate, type: selectedType }, function (data) {
         $("#modalContainer").html(data);
         $("#addTransactionModal").modal("show");
     });
@@ -110,7 +109,7 @@ function handleFormSubmit(e) {
 
     $(".error-label").hide();
 
-    $.post("/Calendar/AddEntry", $(this).serialize(), function (response) {
+    $.post("/Calendar/AddTransaction", $(this).serialize(), function (response) {
         if (response.success) {
             $("#addTransactionModal").modal("hide");
             location.reload();

@@ -56,7 +56,15 @@
     document.querySelectorAll(".clickable-row").forEach(row => {
         row.addEventListener("click", function () {
             let target = document.querySelector(this.dataset.target);
+            let isOpening = !target.classList.contains("show");
             target.classList.toggle("show");
+
+            if (isOpening) {
+                this.scrollIntoView({ behavior: "smooth", block: "center" });
+            }
+
+            let arrow = this.querySelector(".arrow-icon");
+            arrow.innerHTML = target.classList.contains("show") ? "&and;" : "&or;";
         });
     });
 });
